@@ -44,6 +44,6 @@ public class cave_gen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
