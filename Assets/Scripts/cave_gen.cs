@@ -9,7 +9,9 @@ public class cave_gen : MonoBehaviour
     [SerializeField] float seed;
     [Range(0,1)]
     [SerializeField] float modifier;
-    [SerializeField] GameObject tile;
+    [SerializeField] GameObject wallTile;
+    [SerializeField] GameObject groundTile;
+
     //[SerializeField] GameObject base_map;
 
 
@@ -34,7 +36,12 @@ public class cave_gen : MonoBehaviour
                 int spawnpoint = 1 - Mathf.RoundToInt(Mathf.PerlinNoise((x * modifier) + seed, (y * modifier) + seed));
                 if (spawnpoint == 1){
 
-                    Instantiate(tile, new Vector2(x, y), Quaternion.identity);
+                    Instantiate(wallTile, new Vector2(x, y), Quaternion.identity);
+
+                }
+                else{
+
+                    Instantiate(groundTile, new Vector2(x, y), Quaternion.identity);
 
                 }
             }

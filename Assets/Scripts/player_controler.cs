@@ -13,7 +13,7 @@ public class player_controler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector2(0, 0);
+        transform.position = new Vector3(0, 0, 0);
 
 
     }
@@ -26,7 +26,7 @@ public class player_controler : MonoBehaviour
         _horizontalInput = Input.GetAxis("Horizontal");
         _verticalInput = Input.GetAxis("Vertical");
 
-        Vector2 direction = new Vector3(_horizontalInput, _verticalInput);
+        Vector3 direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
