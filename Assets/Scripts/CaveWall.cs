@@ -6,11 +6,12 @@ using UnityEngine;
 public class CaveWall : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float Health;
+    public float health;
+    public GameObject replacment;
 
     void Start()
     {
-        Health = 10f;
+        health = 10f;
 
     }
 
@@ -24,10 +25,13 @@ public class CaveWall : MonoBehaviour
 
     void mineWall()
     {
-        Health -= 5;
-        if(Health == 0){
-            Destroy(this.gameObject);
+        Vector3 posHolder = new Vector3(0,0,0);
 
+        health -= 5;
+        if(health == 0){
+            posHolder = this.gameObject.transform.position;
+            Instantiate(replacment, posHolder, Quaternion.identity);
+            Destroy(this.gameObject);
         }
     }
 

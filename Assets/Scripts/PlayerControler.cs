@@ -6,7 +6,9 @@ public class player_controler : MonoBehaviour
 {
 
     [SerializeField]
-    private float _speed = 3.5f;
+    public Camera playerCamera;
+    public Vector3 camera_offset;
+    public float _speed = 3.5f;
     private float _horizontalInput;
     private float _verticalInput;
 
@@ -29,6 +31,10 @@ public class player_controler : MonoBehaviour
         Vector3 direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
+
+        playerCamera.transform.position = new Vector3 (this.gameObject.transform.position.x + camera_offset.x,
+                                                       this.gameObject.transform.position.y + camera_offset.y,
+                                                       camera_offset.z);
 
     }
 }
