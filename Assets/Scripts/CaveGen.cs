@@ -1,62 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AstarPath;
 
-public class cave_gen : MonoBehaviour
+
+public class CaveGen : MonoBehaviour
 {
-
-    [SerializeField] int startX, startY, width, height;
-    [SerializeField] float seed;
+    public int startX, startY, width, height;
+    public float seed;
     [Range(0,1)]
-    [SerializeField] float modifier;
-    [SerializeField] GameObject wallTile;
-    [SerializeField] GameObject groundTile;
-    [SerializeField] GameObject Trigger;
-    [SerializeField] bool north, south, east, west;
+    public float modifier;
+    public GameObject wallTile;
+    public GameObject groundTile;
+    public GameObject tressureTile;
+    public GameObject trigger;
+
+    public GameObject enemy;
+
+    public bool north, south, east, west;
+    public double caveUpdateTime;
+    private double timeholder= 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         //seed = Random.Range(-100000, 100000);
-        PerlinCaveGen(startX, startY);
+        Vector2Int starting_coord = new Vector2Int(startX, startY);
+        Vector2Int exclude_top_right = new Vector2Int(9, 9);
+        Vector2Int exclude_bottom_left = new Vector2Int(-9, -9);
 
-        if(north){
+        PerlinCaveGen(starting_coord, width, height, exclude_bottom_left, exclude_top_right);
 
-            Instantiate(Trigger, new Vector2(startX + 25, startY + 45), Quaternion.Euler(0, 0, 0));
-
-        }
-        if(south){
-
-            Instantiate(Trigger, new Vector2(startX + 25, startY + 5), Quaternion.Euler(0, 0, 180));
-
-        }
-        if(east){
-
-            Instantiate(Trigger, new Vector2(startX + 5, startY + 25), Quaternion.Euler(0, 0, 90));
-
-        }
-        if(west){
-
-           Instantiate(Trigger, new Vector2(startX + 45, startY + 25), Quaternion.Euler(0, 0, 270));
-
-        }
 
     }
 
-    void PerlinCaveGen(int start_x, int start_y){
+    public void PerlinCaveGen(Vector2Int starting_coord, int width, int height, Vector2Int exclude_bottom_left, Vector2Int exclude_top_right){
+
+        for(int x = starting_coord.x; x < starting_coord.x + width; x++){
+
+            for(int y = starting_coord.y; y < starting_coord.y + height; y++){
+
+                // to make sure the ecluded area doesn't get filled in
+                if(!((exclude_bottom_left.x < x && x < exclude_top_right.x) && (exclude_bottom_left.y < y && y < exclude_top_right.y))){
+
+                    float tileProb = 1 - Mathf.PerlinNoise((x * modifier) + seed, (y * modifier) + seed);
+                    // if bigger
+                    if (tileProb > .95 ){
+
+                        Instantiate(tressureTile, new Vector2(x, y), Quaternion.identity);
+
+                    }
+                    // if the noise is greater than fifty spawn a wall
+                    else if( tileProb > .50 ){
+
+                        Instantiate(wallTile, new Vector2(x, y), Quaternion.identity);
+
+                    }else{
+
+                        Instantiate(groundTile, new Vector2(x, y), Quaternion.identity);
 
 
-        for(int x = start_x; x < width; x++){
+                        // spawn enemys on some p ercentage of the cave floor
+                        if ( 0.10 > Random.Range(0.0f,99.0f)){
 
-            for(int y = start_y; y < height; y++){
+                            Instantiate(enemy, new Vector2(x, y), Quaternion.identity);
 
-                int spawnpoint = 1 - Mathf.RoundToInt(Mathf.PerlinNoise((x * modifier) + seed, (y * modifier) + seed));
-                if (spawnpoint == 1){
+                        }
 
-                    Instantiate(wallTile, new Vector2(x, y), Quaternion.identity);
 
-                }
-                else{
+
+                    }
+
+                }else{
 
                     Instantiate(groundTile, new Vector2(x, y), Quaternion.identity);
 
@@ -65,11 +80,14 @@ public class cave_gen : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    /*
-    void Update()
-    {
+    void Update(){
+
+        timeholder += Time.deltaTime;
+        if(timeholder >= caveUpdateTime){
+            AstarPath.active.Scan();
+            timeholder = 0.0;
+        }
 
     }
-    */
+
 }

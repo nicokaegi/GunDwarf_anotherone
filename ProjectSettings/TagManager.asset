@@ -3,12 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - bullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Obstacles
   - Water
   - UI
   - 
@@ -40,4 +41,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: player
+    uniqueID: 2760346821
+    locked: 0
+  - name: blocks
+    uniqueID: 2780270663
     locked: 0
