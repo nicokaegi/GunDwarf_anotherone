@@ -133,8 +133,9 @@ MonoBehaviour:
   speed: 6
   nextWaypointDistance: 3
   playerTarget: {fileID: 0}
-  bulletObject: {fileID: 2502712741530286475, guid: 4202cf8ce9a3302c497a4d259232bdf1, type: 3}
+  bulletObject: {fileID: 2502712741530286475, guid: 72b32587e7cc3af5ab6495828ddebe62, type: 3}
   reachedEndOfPath: 0
+  reloadTime: 3
 --- !u!50 &462779672456864193
 Rigidbody2D:
   serializedVersion: 4

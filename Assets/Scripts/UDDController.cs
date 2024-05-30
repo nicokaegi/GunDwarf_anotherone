@@ -49,7 +49,7 @@ public class UDDController : MonoBehaviour
 
         timeHolder += Time.deltaTime;
 
-        if (timeHolder >= timeHolder) {
+        if (timeHolder >= reloadTime) {
             timeHolder = 0;
 
             Vector3 diffVector = transform.position - playerTarget.transform.position;
@@ -70,7 +70,6 @@ public class UDDController : MonoBehaviour
         /*path logic */
 
         /* ai brain logic */
-
 
         if(hunting){
 
@@ -112,7 +111,7 @@ public class UDDController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision){
 
-            if (collision.gameObject.tag == "bullet"){
+            if (collision.gameObject.tag == "PlayerBullet"){
                 reduceHealth();
             }
 
@@ -138,7 +137,7 @@ public class UDDController : MonoBehaviour
 
         /* copy pasted from https://arongranberg.com/astar/
         *
-        * and modified by yours truly
+        * and modified by yours truly -- Nico Kaegi
         */
 
         if(path == null){

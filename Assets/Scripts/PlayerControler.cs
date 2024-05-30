@@ -77,8 +77,14 @@ public class PlayerControler : MonoBehaviour
         }
 
 
+        // right click to shot a bullet
         if(Input.GetMouseButtonDown(0))
         {
+            /*
+             * Basiclly when you right click a bullet object is shot roughly in the direction of the players mouse.
+             * due to some ..... bullshit I had to make calculate the mouse direction from the player in screen cords and then
+             * when I get the unit vector I just used that for the bullet in game cords
+             */
 
             Vector2 mouseScreenPos = Input.mousePosition;
             Vector2 playerScreenPos = new Vector2(Screen.width/2, Screen.height/2);
@@ -101,6 +107,26 @@ public class PlayerControler : MonoBehaviour
             cameraOffset.z += camera_scroll;
         }
 
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision){
+
+        if (collision.gameObject.tag == "UDBullet"){
+            reduceHealth();
+        }
+
+
+    }
+
+
+    private void reduceHealth(){
+
+        health -= 5;
+
+        if(health <= 0){
+            Debug.Log("Lost health");
+            //Destroy(this.gameObject);
+        }
     }
 
     void LateUpdate()

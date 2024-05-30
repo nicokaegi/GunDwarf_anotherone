@@ -24,7 +24,7 @@ public class CaveGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //seed = Random.Range(-100000, 100000);
+        seed = Random.Range(-10000, 10000);
         Vector2Int starting_coord = new Vector2Int(startX, startY);
         Vector2Int exclude_top_right = new Vector2Int(9, 9);
         Vector2Int exclude_bottom_left = new Vector2Int(-9, -9);
