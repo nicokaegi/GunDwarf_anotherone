@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public class PlayerBulletController : MonoBehaviour
 {
     // Start is called before the first frame update
     public float bulletLifeThreshold = 30.0f;
@@ -16,6 +16,15 @@ public class BulletController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(this.gameObject);
+
+
+        if (collision.gameObject.tag == "PlayerBullet") {
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
+        }
+        else{
+            Destroy(this.gameObject);
+
+        }
+
     }
 }

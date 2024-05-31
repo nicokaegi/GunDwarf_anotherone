@@ -14,8 +14,6 @@ public class CaveWall : MonoBehaviour
     void Start()
     {
         health = 10.0f;
-        Debug.Log("wall spawned");
-
     }
     // ToDo : finishing refactoring mining with ray casts
 
@@ -28,7 +26,7 @@ public class CaveWall : MonoBehaviour
             posHolder = this.gameObject.transform.position;
             Instantiate(replacment, posHolder, Quaternion.identity);
             Destroy(this.gameObject);
-            AstarPath.active.Scan();
+            //AstarPath.active.Scan();
         }
     }
 

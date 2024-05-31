@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class PlayerControler : MonoBehaviour
     public int gold = 0;
 
     public int ammo = 5;
-    public int health = 5;
+    public int health = 100;
     public int lampoil = 10;
 
     public int ammo_max = 20;
@@ -30,12 +32,29 @@ public class PlayerControler : MonoBehaviour
 
 
     private float timeHolder = 0.0f;
-    public float lightDecayTime = 10.0f;
+    public float lightDecayTime = 100.0f;
+
+    private Slider healthSlider;
+    private Slider lampOilSlider;
+    private Text AmmoCounter;
+    private Text GoldCounter;
+    private Light2D lightHolder;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+
+
+        healthSlider = GameObject.Find("Health").GetComponent<Slider>();
+        lampOilSlider = GameObject.Find("LampOil").GetComponent<Slider>();
+
+
+        AmmoCounter = GameObject.Find("AmmoCounter").GetComponent<Text>();
+        GoldCounter = GameObject.Find("GoldCounter").GetComponent<Text>();
+        lightHolder = GetComponent<Light2D>();
+
+
 
     }
 
@@ -65,19 +84,19 @@ public class PlayerControler : MonoBehaviour
                     if(WallScript is TressureWall){
                         TressureWall TressureWallScript = (TressureWall) WallScript;
                         gold += TressureWallScript.mineWall();
+                        GoldCounter.text = gold.ToString();
 
                     }else{
 
                         WallScript.mineWall();
 
                     }
-
                 }
             }
         }
 
 
-        // right click to shot a bullet
+        // right clAmmoCounterick to shot a bullet
         if(Input.GetMouseButtonDown(0))
         {
             /*
@@ -94,6 +113,7 @@ public class PlayerControler : MonoBehaviour
             GameObject bulletInstance = Instantiate(bulletObject, (transform.position + mouseDirection),  Quaternion.Euler(mouseDirection.x, mouseDirection.y, mouseDirection.z));
             bulletInstance.GetComponent<Rigidbody2D>().AddForce(mouseDirection * 3000);
 
+            AmmoCounter.text = ammo.ToString();
         }
 
         //player movment
@@ -115,6 +135,10 @@ public class PlayerControler : MonoBehaviour
             reduceHealth();
         }
 
+        if (collision.gameObject.tag == "PlayerBullet") {
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<BoxCollider2D>());
+        }
+
 
     }
 
@@ -126,6 +150,11 @@ public class PlayerControler : MonoBehaviour
         if(health <= 0){
             Debug.Log("Lost health");
             //Destroy(this.gameObject);
+        }
+        else{
+
+            healthSlider.value -= .05f;
+
         }
     }
 
@@ -139,6 +168,8 @@ public class PlayerControler : MonoBehaviour
             timeHolder = 0;
 
             lampoil -= 1;
+            lampOilSlider.value -= 0.01f;
+            lightHolder.pointLightOuterRadius -= 5;
         }
 
         playerCamera.transform.position = new Vector3 (this.gameObject.transform.position.x + cameraOffset.x,

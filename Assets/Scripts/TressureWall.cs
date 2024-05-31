@@ -14,7 +14,6 @@ public class TressureWall : CaveWall
     void Start()
     {
         health = 10.0f;
-        Debug.Log("wall spawned");
 
     }
 

@@ -7,6 +7,10 @@ TagManager:
   - bullet
   - PlayerBullet
   - UDBullet
+  - Health
+  - LampOil
+  - AmmoCounter
+  - GoldCounter
   layers:
   - Default
   - TransparentFX
