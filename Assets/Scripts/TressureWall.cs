@@ -8,7 +8,7 @@ using static AstarPath;
 public class TressureWall : CaveWall
 {
     // Start is called before the first frame update
-    public int gold = 5;
+    public int gold = 1;
 
 
     void Start()
@@ -27,12 +27,12 @@ public class TressureWall : CaveWall
             posHolder = this.gameObject.transform.position;
             Instantiate(replacment, posHolder, Quaternion.identity);
             Destroy(this.gameObject);
-            AstarPath.active.Scan();
 
-            return this.gold;
+            return gold;
         }
 
         return 0;
+
     }
 
 }

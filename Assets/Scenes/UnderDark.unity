@@ -255,7 +255,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Ammo : 40/40'
+  m_text: 'Ammo : 100/100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -60.28717, w: 0}
+  m_margin: {x: 0, y: 0, z: -111.51587, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.5615012, b: 0, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 10
+  m_PointLightOuterRadius: 100
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -400,18 +400,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 970373844}
-  cameraOffset: {x: 0, y: 0, z: -10}
+  cameraOffset: {x: 0, y: 0, z: -50}
   bulletObject: {fileID: 2502712741530286475, guid: 4202cf8ce9a3302c497a4d259232bdf1, type: 3}
   _speed: 13
   miningThreshold: 130
   gold: 0
-  ammo: 5
-  health: 5
-  lampoil: 5
-  ammo_max: 20
-  health_max: 20
-  lampoil_max: 20
-  lightDecayTime: 10
+  ammo: 100
+  ammo_max: 100
+  health: 100
+  health_max: 100
+  lampoil: 40
+  lampoil_max: 40
+  lightDecayRate: 0.005
+  lightLowerBound: 4
 --- !u!1 &561121937
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +736,7 @@ MonoBehaviour:
   heuristicScale: 1
   threadCount: 1
   maxFrameTime: 10
-  batchGraphUpdates: 0
+  batchGraphUpdates: 1
   graphUpdateBatchingInterval: 0.2
   euclideanEmbedding:
     mode: 0
@@ -806,7 +807,7 @@ GameObject:
   - component: {fileID: 960469054}
   m_Layer: 5
   m_Name: LampOil
-  m_TagString: LampOil
+  m_TagString: LampOilSlider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1125,7 +1126,7 @@ GameObject:
   - component: {fileID: 1537583356}
   m_Layer: 5
   m_Name: Health
-  m_TagString: Health
+  m_TagString: HealthSlider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1373,7 +1374,7 @@ GameObject:
   - component: {fileID: 1769984755}
   m_Layer: 5
   m_Name: GoldCounter
-  m_TagString: Untagged
+  m_TagString: GoldCounter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1394,7 +1395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 328.4, y: 217.79999}
+  m_AnchoredPosition: {x: 367.3, y: 217.79999}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1769984755
@@ -1417,7 +1418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Gold : 20'
+  m_text: 'Gold : 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1598,8 +1599,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 480ace75b39582e02859157812cdf44c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starting_coord: {x: -25, y: -25}
-  ending_coord: {x: 25, y: 25}
+  starting_coord: {x: -50, y: -50}
+  ending_coord: {x: 50, y: 50}
   exclude_starting_coord: {x: -9, y: -9}
   exclude_ending_coord: {x: 9, y: 9}
   generationThreshold: 25
@@ -1928,7 +1929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5109453596118897691, guid: f8d9feb1a5904a3a1af9cc9e6100f1a7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.121692
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 5109453596118897691, guid: f8d9feb1a5904a3a1af9cc9e6100f1a7, type: 3}
       propertyPath: m_LocalRotation.w

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerBulletController : MonoBehaviour
 {
-    // Start is called before the first frame update
     public float bulletLifeThreshold = 30.0f;
     private Vector3 initPosition;
 
@@ -18,7 +17,7 @@ public class PlayerBulletController : MonoBehaviour
     {
 
 
-        if (collision.gameObject.tag == "PlayerBullet") {
+        if (collision.gameObject.tag == "Player") {
             Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
         }
         else{

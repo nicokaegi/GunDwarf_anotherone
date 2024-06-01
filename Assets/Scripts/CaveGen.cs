@@ -20,6 +20,8 @@ public class CaveGen : MonoBehaviour
     public GameObject groundTile;
     public GameObject tressureTile;
 
+    public float SpawnRate = 0.20f;
+
     public GameObject enemy;
 
     public double caveUpdateTime;
@@ -103,7 +105,7 @@ public class CaveGen : MonoBehaviour
                         Instantiate(groundTile, new Vector2(x, y), Quaternion.identity);
 
                         // spawn enemys on some p ercentage of the cave floor
-                        if ( 0.10 > Random.Range(0.0f,99.0f)){
+                        if ( SpawnRate > Random.Range(0.0f,99.0f)){
 
                             Instantiate(enemy, new Vector2(x, y), Quaternion.identity);
 

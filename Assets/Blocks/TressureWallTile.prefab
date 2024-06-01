@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   replacment: {fileID: 6023460011845968694, guid: a7f3cd722a2a7ff0d8b3483aecfd3544, type: 3}
-  gold: 5
+  gold: 1
 --- !u!61 &815827288621948782
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using UnityEngine;
 public class UDBulletController : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float bulletLifeThreshold = 30.0f;
     private Vector3 initPosition;
 
     void Start()
@@ -18,7 +17,7 @@ public class UDBulletController : MonoBehaviour
     {
 
 
-        if (collision.gameObject.tag == "UDBullet") {
+        if (collision.gameObject.tag == "UnderDarkDweller") {
             Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
         }
         else{

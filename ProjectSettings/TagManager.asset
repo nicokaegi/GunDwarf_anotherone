@@ -7,10 +7,10 @@ TagManager:
   - bullet
   - PlayerBullet
   - UDBullet
-  - Health
-  - LampOil
   - AmmoCounter
   - GoldCounter
+  - HealthSlider
+  - LampOilSlider
   layers:
   - Default
   - TransparentFX

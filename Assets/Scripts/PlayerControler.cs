@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -16,13 +17,11 @@ public class PlayerControler : MonoBehaviour
 
     public int gold = 0;
 
-    public int ammo = 5;
-    public int health = 100;
-    public int lampoil = 10;
+    public int ammo = 40;
+    public int ammo_max = 50;
 
-    public int ammo_max = 20;
-    public int health_max = 20;
-    public int lampoil_max = 20;
+    public float health = 100;
+    public float health_max = 100;
 
     private float _horizontalInput;
     private float _verticalInput;
@@ -30,31 +29,32 @@ public class PlayerControler : MonoBehaviour
     private Vector3 direction;
     private RaycastHit2D hit;
 
-
-    private float timeHolder = 0.0f;
-    public float lightDecayTime = 100.0f;
+    public float lampoil = 40.0f;
+    public float lampoil_max = 40.0f;
+    public float lightDecayRate = 0.01f;
+    public float lightLowerBound = 4.0f;
 
     private Slider healthSlider;
     private Slider lampOilSlider;
-    private Text AmmoCounter;
-    private Text GoldCounter;
+    private TMP_Text AmmoCounter;
+    private TMP_Text GoldCounter;
     private Light2D lightHolder;
 
     // Start is called before the first frame update
     void Start()
     {
+
         transform.position = new Vector3(0, 0, 0);
 
+        healthSlider = GameObject.FindGameObjectsWithTag("HealthSlider")[0].GetComponent<Slider>();
+        lampOilSlider = GameObject.FindGameObjectsWithTag("LampOilSlider")[0].GetComponent<Slider>();
 
-        healthSlider = GameObject.Find("Health").GetComponent<Slider>();
-        lampOilSlider = GameObject.Find("LampOil").GetComponent<Slider>();
-
-
-        AmmoCounter = GameObject.Find("AmmoCounter").GetComponent<Text>();
-        GoldCounter = GameObject.Find("GoldCounter").GetComponent<Text>();
+        AmmoCounter = GameObject.FindGameObjectsWithTag("AmmoCounter")[0].GetComponent<TMP_Text>();
+        GoldCounter = GameObject.FindGameObjectsWithTag("GoldCounter")[0].GetComponent<TMP_Text>();
         lightHolder = GetComponent<Light2D>();
 
-
+        lampoil = lampoil_max;
+        lampOilSlider.value = 1.0f;
 
     }
 
@@ -78,13 +78,12 @@ public class PlayerControler : MonoBehaviour
             RaycastHit2D cubeHit = Physics2D.Raycast(transform.position, mouseDirection);
             if(cubeHit){
                 if(miningThreshold > cubeHit.distance){
-                    Debug.Log(cubeHit.collider.gameObject.name);
                     CaveWall WallScript = cubeHit.collider.GetComponent<CaveWall>();
 
                     if(WallScript is TressureWall){
                         TressureWall TressureWallScript = (TressureWall) WallScript;
                         gold += TressureWallScript.mineWall();
-                        GoldCounter.text = gold.ToString();
+                        GoldCounter.text = string.Format("Gold : {0}", gold);
 
                     }else{
 
@@ -105,15 +104,20 @@ public class PlayerControler : MonoBehaviour
              * when I get the unit vector I just used that for the bullet in game cords
              */
 
-            Vector2 mouseScreenPos = Input.mousePosition;
-            Vector2 playerScreenPos = new Vector2(Screen.width/2, Screen.height/2);
-            Vector2 mouseToPlayerDistanceScreen = playerScreenPos - mouseScreenPos ;
-            Vector3 mouseDirection = -1*Vector3.Normalize(mouseToPlayerDistanceScreen);
+            if( ammo > 0 ){
 
-            GameObject bulletInstance = Instantiate(bulletObject, (transform.position + mouseDirection),  Quaternion.Euler(mouseDirection.x, mouseDirection.y, mouseDirection.z));
-            bulletInstance.GetComponent<Rigidbody2D>().AddForce(mouseDirection * 3000);
+                Vector2 mouseScreenPos = Input.mousePosition;
+                Vector2 playerScreenPos = new Vector2(Screen.width/2, Screen.height/2);
+                Vector2 mouseToPlayerDistanceScreen = playerScreenPos - mouseScreenPos ;
+                Vector3 mouseDirection = -1*Vector3.Normalize(mouseToPlayerDistanceScreen);
 
-            AmmoCounter.text = ammo.ToString();
+                GameObject bulletInstance = Instantiate(bulletObject, (transform.position + mouseDirection),  Quaternion.Euler(mouseDirection.x, mouseDirection.y, mouseDirection.z));
+                bulletInstance.GetComponent<Rigidbody2D>().AddForce(mouseDirection * 3000);
+
+                ammo -= 1;
+                AmmoCounter.text = string.Format("Ammo : {0}/{1}", ammo, ammo_max);
+
+            }
         }
 
         //player movment
@@ -153,7 +157,7 @@ public class PlayerControler : MonoBehaviour
         }
         else{
 
-            healthSlider.value -= .05f;
+            healthSlider.value = health/health_max;
 
         }
     }
@@ -161,16 +165,13 @@ public class PlayerControler : MonoBehaviour
     void LateUpdate()
     {
 
-
-        timeHolder += Time.deltaTime;
-
-        if (timeHolder >= lightDecayTime) {
-            timeHolder = 0;
-
-            lampoil -= 1;
-            lampOilSlider.value -= 0.01f;
-            lightHolder.pointLightOuterRadius -= 5;
+        if(lampoil > 4){
+            lampoil -= lampoil*(Time.deltaTime*lightDecayRate);
+            lampOilSlider.value = lampoil/lampoil_max;
+            lightHolder.pointLightOuterRadius = lampoil;
         }
+
+
 
         playerCamera.transform.position = new Vector3 (this.gameObject.transform.position.x + cameraOffset.x,
                                                 this.gameObject.transform.position.y + cameraOffset.y,

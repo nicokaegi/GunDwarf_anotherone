@@ -12,7 +12,8 @@ public class UDDController : MonoBehaviour
 
     public Path path;
 
-    public float health = 15;
+    public float max_health = 15;
+    private float curr_health;
 
     public float speed = 2;
 
@@ -46,17 +47,18 @@ public class UDDController : MonoBehaviour
 
     public void basicShoot(GameObject playerTarget, int bulletForce){
 
+        curr_health = max_health;
 
         timeHolder += Time.deltaTime;
 
         if (timeHolder >= reloadTime) {
             timeHolder = 0;
 
-            Vector3 diffVector = transform.position - playerTarget.transform.position;
+            Vector3 diffVector = playerTarget.transform.position - transform.position;
             Vector3 DirectionToPlayer = Vector3.Normalize(diffVector);
 
 
-            GameObject bulletInstance = Instantiate(bulletObject, (transform.position + -2*DirectionToPlayer),  Quaternion.Euler(DirectionToPlayer.x, DirectionToPlayer.y, DirectionToPlayer.z));
+            GameObject bulletInstance = Instantiate(bulletObject, (transform.position + 2*DirectionToPlayer),  Quaternion.Euler(DirectionToPlayer.x, DirectionToPlayer.y, DirectionToPlayer.z));
             bulletInstance.GetComponent<Rigidbody2D>().AddForce(DirectionToPlayer * bulletForce);
         }
 
@@ -71,12 +73,21 @@ public class UDDController : MonoBehaviour
 
         /* ai brain logic */
 
+
+        if(curr_health <= max_health/2 ){
+
+            Color color;
+            ColorUtility.TryParseHtmlString("#7B0000", out color);
+
+            GetComponent<SpriteRenderer>().color = color;
+
+        }
         if(hunting){
 
             HuntPlayer();
 
 
-            if(distanceToPlayer < 8){
+            if(distanceToPlayer < 15){
 
                 basicShoot(playerTarget, 1500);
 
@@ -111,19 +122,22 @@ public class UDDController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision){
 
-            if (collision.gameObject.tag == "PlayerBullet"){
+            if (collision.gameObject.tag == "Player"){
                 reduceHealth();
             }
 
+            if (collision.gameObject.tag == "UDDbullet") {
+                Physics2D.IgnoreCollision(collision.collider, GetComponent<BoxCollider2D>());
+            }
 
     }
 
 
     private void reduceHealth(){
 
-        health -= 5;
+        curr_health -= 5;
 
-        if(health <= 0){
+        if(curr_health <= 0){
             Destroy(this.gameObject);
         }
     }
