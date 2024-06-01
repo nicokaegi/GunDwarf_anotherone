@@ -11,6 +11,11 @@ TagManager:
   - GoldCounter
   - HealthSlider
   - LampOilSlider
+  - UnderDarkDweller
+  - OilShop
+  - HealthShop
+  - AmmoShop
+  - DeathMessage
   layers:
   - Default
   - TransparentFX
@@ -47,6 +52,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Shops
+    uniqueID: 2993528017
     locked: 0
   - name: player
     uniqueID: 2760346821

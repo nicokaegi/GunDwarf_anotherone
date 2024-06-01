@@ -13,7 +13,7 @@ public class UDDController : MonoBehaviour
     public Path path;
 
     public float max_health = 15;
-    private float curr_health;
+    public float curr_health;
 
     public float speed = 2;
 
@@ -36,6 +36,10 @@ public class UDDController : MonoBehaviour
     public float reloadTime = 3.0f;
 
     public void Start () {
+        //so the UDdweller shots first the reloads
+        timeHolder = reloadTime;
+        curr_health = max_health;
+
         seeker = GetComponent<Seeker>();
 
         playerTarget = GameObject.Find("Carrot");
@@ -47,7 +51,6 @@ public class UDDController : MonoBehaviour
 
     public void basicShoot(GameObject playerTarget, int bulletForce){
 
-        curr_health = max_health;
 
         timeHolder += Time.deltaTime;
 
@@ -122,7 +125,9 @@ public class UDDController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision){
 
-            if (collision.gameObject.tag == "Player"){
+            Debug.Log("hit by thingy");
+            if (collision.gameObject.tag == "PlayerBullet"){
+                Debug.Log("hit by player");
                 reduceHealth();
             }
 
@@ -162,7 +167,6 @@ public class UDDController : MonoBehaviour
 
         distanceDiff = Vector3.Distance(playerTarget.transform.position, initPosition);
         if(distanceDiff > 5 ){
-            Debug.Log("restart");
             seeker.CancelCurrentPathRequest();
             seeker.StartPath(transform.position, playerTarget.transform.position, OnPathComplete);
             initPosition = playerTarget.transform.position;

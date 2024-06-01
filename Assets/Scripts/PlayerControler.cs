@@ -38,11 +38,18 @@ public class PlayerControler : MonoBehaviour
     private Slider lampOilSlider;
     private TMP_Text AmmoCounter;
     private TMP_Text GoldCounter;
+    private TMP_Text deathMessage;
+
     private Light2D lightHolder;
+
+    public GameObject deadBody;
+
+    private Rigidbody2D rigidbody2D;
 
     // Start is called before the first frame update
     void Start()
     {
+        rigidbody2D = this.gameObject.GetComponent<Rigidbody2D>();
 
         transform.position = new Vector3(0, 0, 0);
 
@@ -51,7 +58,10 @@ public class PlayerControler : MonoBehaviour
 
         AmmoCounter = GameObject.FindGameObjectsWithTag("AmmoCounter")[0].GetComponent<TMP_Text>();
         GoldCounter = GameObject.FindGameObjectsWithTag("GoldCounter")[0].GetComponent<TMP_Text>();
-        lightHolder = GetComponent<Light2D>();
+        deathMessage = GameObject.FindGameObjectsWithTag("DeathMessage")[0].GetComponent<TMP_Text>();
+
+        //lightHolder = this.GetComponent<Light2D>();
+        //Debug.Log(lightHolder);
 
         lampoil = lampoil_max;
         lampOilSlider.value = 1.0f;
@@ -83,7 +93,7 @@ public class PlayerControler : MonoBehaviour
                     if(WallScript is TressureWall){
                         TressureWall TressureWallScript = (TressureWall) WallScript;
                         gold += TressureWallScript.mineWall();
-                        GoldCounter.text = string.Format("Gold : {0}", gold);
+                        updateGoldCounter();
 
                     }else{
 
@@ -115,14 +125,15 @@ public class PlayerControler : MonoBehaviour
                 bulletInstance.GetComponent<Rigidbody2D>().AddForce(mouseDirection * 3000);
 
                 ammo -= 1;
-                AmmoCounter.text = string.Format("Ammo : {0}/{1}", ammo, ammo_max);
+                updateAmmoCounter();
 
             }
         }
 
         //player movment
         direction = new Vector3(_horizontalInput, _verticalInput, 0);
-        transform.Translate(direction * _speed * Time.deltaTime);
+        Vector3 player_v = direction * _speed * Time.deltaTime;
+        rigidbody2D.velocity = player_v;
 
         //ToDo fix this it doesn't seem to do anything at the momment
         float camera_scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -130,6 +141,71 @@ public class PlayerControler : MonoBehaviour
 
             cameraOffset.z += camera_scroll;
         }
+
+
+        playerCamera.transform.position = new Vector3 (this.gameObject.transform.position.x + cameraOffset.x,
+                                                this.gameObject.transform.position.y + cameraOffset.y,
+                                                cameraOffset.z);
+
+        // continuously shrink the lit up area around the player but
+        // just leave just enough for the player to navigate with
+        if(lampoil > 4){
+            lampoil -= lampoil*(Time.deltaTime*lightDecayRate);
+            GetComponent<Light2D>().pointLightOuterRadius = lampoil;
+            updateOilSlider();
+
+        }
+
+    }
+
+    private void updateGoldCounter(){
+
+        GoldCounter.text = string.Format("Gold : {0}", gold);
+
+    }
+
+    private void updateAmmoCounter(){
+
+        AmmoCounter.text = string.Format("Ammo : {0}/{1}", ammo, ammo_max);
+
+    }
+
+
+    private void updateHealthSlider(){
+
+        healthSlider.value = health/health_max;
+
+    }
+
+    private void updateOilSlider(){
+
+        lampOilSlider.value = lampoil/lampoil_max;
+
+    }
+
+    public void refillOil(int price){
+
+        lampoil = lampoil_max;
+        gold -= price;
+        updateGoldCounter();
+        updateOilSlider();
+    }
+
+    public void refillHealth(int price){
+
+        health = health_max;
+        gold -= price;
+        updateGoldCounter();
+        updateHealthSlider();
+
+    }
+
+    public void refillAmmo(int price){
+
+        ammo = ammo_max;
+        gold -= price;
+        updateGoldCounter();
+        updateAmmoCounter();
 
     }
 
@@ -146,6 +222,12 @@ public class PlayerControler : MonoBehaviour
 
     }
 
+    private void die(){
+        Instantiate(deadBody, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
+        deathMessage.color = new Color32(255, 0, 0, 255);
+
+    }
 
     private void reduceHealth(){
 
@@ -153,31 +235,13 @@ public class PlayerControler : MonoBehaviour
 
         if(health <= 0){
             Debug.Log("Lost health");
-            //Destroy(this.gameObject);
+            die();
         }
         else{
 
-            healthSlider.value = health/health_max;
+            updateHealthSlider();
 
         }
     }
-
-    void LateUpdate()
-    {
-
-        if(lampoil > 4){
-            lampoil -= lampoil*(Time.deltaTime*lightDecayRate);
-            lampOilSlider.value = lampoil/lampoil_max;
-            lightHolder.pointLightOuterRadius = lampoil;
-        }
-
-
-
-        playerCamera.transform.position = new Vector3 (this.gameObject.transform.position.x + cameraOffset.x,
-                                                this.gameObject.transform.position.y + cameraOffset.y,
-                                                cameraOffset.z);
-    }
-
-
 
 }

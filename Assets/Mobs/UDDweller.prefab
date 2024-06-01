@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1534620475
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -129,13 +129,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPosition: {fileID: 1761994690431126431, guid: 4e2692ea24a240d8fa6f5f03f6afa1d7, type: 3}
-  health: 10
+  max_health: 15
+  curr_health: 0
   speed: 6
   nextWaypointDistance: 3
   playerTarget: {fileID: 0}
   bulletObject: {fileID: 2502712741530286475, guid: 72b32587e7cc3af5ab6495828ddebe62, type: 3}
   reachedEndOfPath: 0
-  reloadTime: 3
+  reloadTime: 1.5
 --- !u!50 &462779672456864193
 Rigidbody2D:
   serializedVersion: 4
