@@ -61,7 +61,7 @@ public class UDDController : MonoBehaviour
             Vector3 DirectionToPlayer = Vector3.Normalize(diffVector);
 
 
-            GameObject bulletInstance = Instantiate(bulletObject, (transform.position + 2*DirectionToPlayer),  Quaternion.Euler(DirectionToPlayer.x, DirectionToPlayer.y, DirectionToPlayer.z));
+            GameObject bulletInstance = Instantiate(bulletObject, (transform.position),  Quaternion.Euler(DirectionToPlayer.x, DirectionToPlayer.y, DirectionToPlayer.z));
             bulletInstance.GetComponent<Rigidbody2D>().AddForce(DirectionToPlayer * bulletForce);
         }
 
